@@ -485,23 +485,13 @@ class StateMachineResult:
         self.signals = signals  # Сигналы, которые были вызваны (с учетом сигналов по умолчанию)
         self.components = components  # компоненты и их состояния
 
-def run_state_machine(xml: str,
-                      signals: list[str], sm_parameters: dict, timeout_sec: float = 10.0) -> StateMachineResult:
+def run_state_machine(sm: StateMachine,
+                      signals: list[str], timeout_sec: float = 10.0) -> StateMachineResult:
     """
     Запускает машину состояний на основе CGML XML и списка сигналов.
     Возвращает StateMachineResult: был ли выход по таймауту, список сигналов, компоненты.
     """
     EventLoop.clear()
-    parser = CGMLParser()
-    cgml_state_machines = parser.parse_cgml(xml)
-    if (len(cgml_state_machines.state_machines) == 0):
-        raise ValueError("No state machines found in CGML.")
-    sm = StateMachine(
-        list(
-            cgml_state_machines.state_machines.values()
-            )[0],
-        sm_parameters
-        )
     qhsm = sm.qhsm
     qhsm.current_(qhsm, 'entry')
 

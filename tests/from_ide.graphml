@@ -31,14 +31,14 @@ lapkiVisual/ true
     <node id="qexnakiflyoqhislvpzg">
       <data key="dName">Состояние</data>
       <data key="dData">entry/
-Reader1.read().
+Reader1.read()
 
 Reader1.char_accepted[Reader1.current_char == А]/
-Reader1.read().
-Impulse1.impulseA().
+Reader1.read()
+Impulse1.impulseA()
 
 Reader1.char_accepted[else]/
-Reader1.read().
+Reader1.read()
 
 </data>
       <data key="dGeometry">

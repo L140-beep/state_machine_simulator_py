@@ -58,16 +58,16 @@ class Reader(Component):
 
 class Impulse(Component):
     def impulseA(self):
-        print(f'{self.name}.impulseA()')
-        EventLoop.add_event(f'{self.name}.impulseA')
+        print('impulseA')
+        EventLoop.add_event('impulseA')
 
     def impulseB(self):
-        print(f'{self.name}.impulseB()')
-        EventLoop.add_event(f'{self.name}.impulseB')
+        print('impulseB')
+        EventLoop.add_event('impulseB')
 
     def impulseC(self):
-        print(f'{self.name}.impulseC()')
-        EventLoop.add_event(f'{self.name}.impulseC')
+        print('impulseC')
+        EventLoop.add_event('impulseC')
 
 class Counter(Component):
     def __init__(self, name: str):
