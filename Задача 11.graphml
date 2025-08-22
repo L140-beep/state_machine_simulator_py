@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <data key="gFormat">Cyberiada-GraphML-1.0</data>
+  <key attr.name="name" attr.type="string" for="node" id="dName"></key>
+  <key attr.name="data" attr.type="string" for="node" id="dData"></key>
+  <key attr.name="data" attr.type="string" for="edge" id="dData"></key>
+  <key attr.name="initial" attr.type="string" for="node" id="dInitial"></key>
+  <key for="edge" id="dGeometry"></key>
+  <key for="node" id="dGeometry"></key>
+  <key for="edge" id="dColor"></key>
+  <key for="node" id="dNote"></key>
+  <key for="node" id="dColor"></key>
+  <graph id="Machine1">
+    <data key="dStateMachine"></data>
+    <data key="dGeometry">
+      <rect x="0" y="0" width="450" height="100"></rect>
+    </data>
+    <node id="coreMeta">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_META</data>
+      <data key="dData">platform/ junior-reader
+
+standardVersion/ 1.0
+
+platformVersion/ 1.0
+
+lapkiVisual/ true
+
+</data>
+    </node>
+    <node id="fqpyxhnilqzsdoqiqhdc">
+      <data key="dName">Счет</data>
+      <data key="dData">entry/
+Reader1.read()
+Counter1.clear()
+
+Reader1.char_accepted[else]/
+Counter1.add(Reader1.current_char)
+Reader1.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="627" y="683" width="450" height="100"></rect>
+      </data>
+    </node>
+    <node id="eztajilgwlkhsyuvxkkc">
+      <data key="dVertex">initial</data>
+      <data key="dGeometry">
+        <point x="569" y="563"></point>
+      </data>
+    </node>
+    <node id="phqmpjuqfufkbhyfclqf">
+      <data key="dVertex">final</data>
+      <data key="dGeometry">
+        <point x="859" y="1165"></point>
+      </data>
+    </node>
+    <node id="fssmjkwmchcjqnmpzqdf">
+      <data key="dVertex">final</data>
+      <data key="dGeometry">
+        <point x="658" y="1171"></point>
+      </data>
+    </node>
+    <node id="hjveqyzuqiltnzlfphnz">
+      <data key="dVertex">choice</data>
+      <data key="dGeometry">
+        <point x="1541" y="801"></point>
+      </data>
+    </node>
+    <node id="cReader1">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Reader1
+
+type/ Reader
+
+name/ Считыватель
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <node id="cImpulse1">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Impulse1
+
+type/ Impulse
+
+name/ Импульс
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <node id="cCounter1">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Counter1
+
+type/ Counter
+
+name/ Сумма
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <edge id="vbcdxtmgkwgozvwktehv" source="eztajilgwlkhsyuvxkkc" target="fqpyxhnilqzsdoqiqhdc"></edge>
+    <edge id="gecxoyolgzikkhnxetqh" source="fqpyxhnilqzsdoqiqhdc" target="hjveqyzuqiltnzlfphnz">
+      <data key="dData">Reader1.char_accepted[Reader1.current_char == -]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1181" y="812"></point>
+      </data>
+    </edge>
+    <edge id="spconailimglbvhpitdh" source="hjveqyzuqiltnzlfphnz" target="fqpyxhnilqzsdoqiqhdc">
+      <data key="dData">[Counter1.value &gt; 33]/
+Impulse1.impulseA()
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1525.5" y="669"></point>
+      </data>
+    </edge>
+    <edge id="kdnovckfselpokapljek" source="hjveqyzuqiltnzlfphnz" target="fqpyxhnilqzsdoqiqhdc">
+      <data key="dData">[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1524.5" y="1007"></point>
+      </data>
+    </edge>
+    <edge id="econyzcwxtwhpksyowou" source="fqpyxhnilqzsdoqiqhdc" target="phqmpjuqfufkbhyfclqf">
+      <data key="dData">Reader1.line_finished[Counter1.value &gt; 33]/
+Impulse1.impulseA()
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="832" y="1023"></point>
+      </data>
+    </edge>
+    <edge id="pqbngssieyiqpgujmmwx" source="fqpyxhnilqzsdoqiqhdc" target="fssmjkwmchcjqnmpzqdf">
+      <data key="dData">Reader1.line_finished[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="607.5" y="1022"></point>
+      </data>
+    </edge>
+  </graph>
+</graphml>

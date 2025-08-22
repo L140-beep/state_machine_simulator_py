@@ -58,15 +58,15 @@ class Reader(Component):
 
 class Impulse(Component):
     def impulseA(self):
-        print('impulseA')
+        # print('impulseA')
         EventLoop.add_event('impulseA', True)
 
     def impulseB(self):
-        print('impulseB')
+        # print('impulseB')
         EventLoop.add_event('impulseB', True)
 
     def impulseC(self):
-        print('impulseC')
+        # print('impulseC')
         EventLoop.add_event('impulseC', True)
 
 class Counter(Component):
@@ -186,7 +186,7 @@ class Gardener:
                 else:
                     self.field[y][x] = 0
             attempts += 1
-        print(f"Walls placed: {walls_placed}")
+        # print(f"Walls placed: {walls_placed}")
 
 
     def update_walls(self):
@@ -341,6 +341,7 @@ class Sensor(Component):
 class UserSignal(Component):
     def call(self):
         EventLoop.add_event(f'{self.name}.call', True)
+
 
 class Flower(Component):
     def __init__(self, name: str):

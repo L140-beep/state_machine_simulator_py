@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <data key="gFormat">Cyberiada-GraphML-1.0</data>
+  <key attr.name="name" attr.type="string" for="node" id="dName"></key>
+  <key attr.name="data" attr.type="string" for="node" id="dData"></key>
+  <key attr.name="data" attr.type="string" for="edge" id="dData"></key>
+  <key attr.name="initial" attr.type="string" for="node" id="dInitial"></key>
+  <key for="edge" id="dGeometry"></key>
+  <key for="node" id="dGeometry"></key>
+  <key for="edge" id="dColor"></key>
+  <key for="node" id="dNote"></key>
+  <key for="node" id="dColor"></key>
+  <graph id="Machine1_1">
+    <data key="dStateMachine"></data>
+    <data key="dName">task10</data>
+    <data key="dGeometry">
+      <rect x="50" y="50" width="450" height="100"></rect>
+    </data>
+    <node id="coreMeta">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_META</data>
+      <data key="dData">platform/ junior-reader
+
+standardVersion/ 1.0
+
+platformVersion/ 1.0
+
+lapkiVisual/ true
+
+</data>
+    </node>
+    <node id="qubtisgeihpkoavxgyzw">
+      <data key="dName">Кит</data>
+      <data key="dData">entry/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="1270.9999999999952" y="751.5000000000005" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="obietjiuypodkkkdslbq">
+      <data key="dName">Ждем К</data>
+      <data key="dData">entry/
+Reader11.read()
+
+Reader11.char_accepted[else]/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="-3.0999999999997616" y="282.80000000000024" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="xwzpffessdskzcchwmnl">
+      <data key="dName">Кошка/Конь</data>
+      <data key="dData">entry/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="1323.399999999999" y="241.69999999999928" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="ljotwmlgbzmhwbpawlun">
+      <data key="dName">К</data>
+      <data key="dData">entry/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="1304.3999999999999" y="-372.5000000000003" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="xbopcehgsdvvptgkglkb">
+      <data key="dName">Ш</data>
+      <data key="dData">entry/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="1313.399999999999" y="-42.70000000000036" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="wwxkajndwodijgcsjekz">
+      <data key="dName">Ждем вторую букву</data>
+      <data key="dData">entry/
+Reader11.read()
+
+Reader11.char_accepted[Reader11.current_char == К]/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="832.5000000000018" y="369.89999999999907" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="bxcjlwlejyhepgeysnxi">
+      <data key="dName">Н</data>
+      <data key="dData">entry/
+Reader11.read()
+
+</data>
+      <data key="dGeometry">
+        <rect x="1697.0999999999983" y="1004.7999999999995" width="450" height="100"></rect>
+      </data>
+      <data key="dColor">#FFFFFF</data>
+    </node>
+    <node id="kejfnzlbanwfyjuigoai">
+      <data key="dVertex">initial</data>
+      <data key="dGeometry">
+        <rect x="-90.79999999999984" y="225.89999999999986" width="-1" height="-1"></rect>
+      </data>
+    </node>
+    <node id="cReader11">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Reader11
+
+type/ Reader
+
+name/ Считыватель
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <node id="cImpulse11">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Impulse11
+
+type/ Impulse
+
+name/ Импульс
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <edge id="jsebtcnbbkkumjuwdzkb" source="kejfnzlbanwfyjuigoai" target="obietjiuypodkkkdslbq"></edge>
+    <edge id="isjgaiomiiedsflbwjjl" source="wwxkajndwodijgcsjekz" target="xwzpffessdskzcchwmnl">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == О]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="890.000000000002" y="271.6499999999995"></point>
+      </data>
+    </edge>
+    <edge id="lanxmbnsdnpouvmvsslv" source="wwxkajndwodijgcsjekz" target="qubtisgeihpkoavxgyzw">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == И]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="852.3000000000003" y="643.1500000000015"></point>
+      </data>
+    </edge>
+    <edge id="pnfwfjzsasctvtfnbycd" source="qubtisgeihpkoavxgyzw" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="364.3999999999966" y="754.7000000000011"></point>
+      </data>
+    </edge>
+    <edge id="ngknmzoeyakqqdmcbkii" source="obietjiuypodkkkdslbq" target="wwxkajndwodijgcsjekz">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="523.1500000000008" y="322.7499999999998"></point>
+      </data>
+    </edge>
+    <edge id="kbpgfmshkeemtjouyawn" source="wwxkajndwodijgcsjekz" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="528.4500000000011" y="428.7499999999996"></point>
+      </data>
+    </edge>
+    <edge id="vpxdubnmdbxuaavyahpc" source="xwzpffessdskzcchwmnl" target="xbopcehgsdvvptgkglkb">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == Ш]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1455.6999999999987" y="126.2499999999995"></point>
+      </data>
+    </edge>
+    <edge id="cmkzxcjfljwmpwqujedt" source="xbopcehgsdvvptgkglkb" target="ljotwmlgbzmhwbpawlun">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1407.9000000000008" y="-180.00000000000043"></point>
+      </data>
+    </edge>
+    <edge id="wwpwhjpyvujkmjqpjmlk" source="xbopcehgsdvvptgkglkb" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="5.450000000000253" y="60.64999999999999"></point>
+      </data>
+    </edge>
+    <edge id="cbulfbsqevawoiqlvgvd" source="ljotwmlgbzmhwbpawlun" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == А]/
+Impulse11.impulseA()
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="129.8500000000006" y="-137.05000000000018"></point>
+      </data>
+    </edge>
+    <edge id="inmvmauuuqaskedkvxqg" source="xwzpffessdskzcchwmnl" target="bxcjlwlejyhepgeysnxi">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == Н]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1862.0500000000004" y="277.2499999999989"></point>
+      </data>
+    </edge>
+    <edge id="tjqavxhmjndizagkxacq" source="bxcjlwlejyhepgeysnxi" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == Ь]/
+Impulse11.impulseB()
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="292.2000000000023" y="1096.299999999999"></point>
+      </data>
+    </edge>
+    <edge id="jlzspfmjfmmmvhjiqoxi" source="qubtisgeihpkoavxgyzw" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == Т]/
+Impulse11.impulseC()
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="700.4999999999982" y="822.8500000000014"></point>
+      </data>
+    </edge>
+    <edge id="ljdusbokoddvbfdvgbtj" source="xwzpffessdskzcchwmnl" target="wwxkajndwodijgcsjekz">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1401.3500000000006" y="385.5999999999991"></point>
+      </data>
+    </edge>
+    <edge id="cuxxcwboemyfynxngjab" source="qubtisgeihpkoavxgyzw" target="wwxkajndwodijgcsjekz">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1302.799999999999" y="563.05"></point>
+      </data>
+    </edge>
+    <edge id="ttfhwmdheswdywotakye" source="bxcjlwlejyhepgeysnxi" target="wwxkajndwodijgcsjekz">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1069.7000000000007" y="896.0499999999993"></point>
+      </data>
+    </edge>
+    <edge id="vgzinlxlvkqhfvbbwsiz" source="bxcjlwlejyhepgeysnxi" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="104.20000000000012" y="965.3499999999996"></point>
+      </data>
+    </edge>
+    <edge id="kksgvgjbyufhvotjqvym" source="ljotwmlgbzmhwbpawlun" target="qubtisgeihpkoavxgyzw">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == И]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="2185.4499999999975" y="774.5000000000001"></point>
+      </data>
+    </edge>
+    <edge id="vdhqbgtgmlupmwitdqtb" source="ljotwmlgbzmhwbpawlun" target="xwzpffessdskzcchwmnl">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == О]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1815.6499999999994" y="-12.900000000000503"></point>
+      </data>
+    </edge>
+    <edge id="qicgcbxacqzahtuhtgzc" source="ljotwmlgbzmhwbpawlun" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="380.65" y="119.79999999999994"></point>
+      </data>
+    </edge>
+    <edge id="neokafuatbyvieikijbm" source="ljotwmlgbzmhwbpawlun" target="wwxkajndwodijgcsjekz">
+      <data key="dData">Reader11.char_accepted[Reader11.current_char == К]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="1132.9500000000007" y="118.99999999999939"></point>
+      </data>
+    </edge>
+    <edge id="wvdnxmoehszflhhlzxfm" source="xwzpffessdskzcchwmnl" target="obietjiuypodkkkdslbq">
+      <data key="dData">Reader11.char_accepted[else]/
+
+</data>
+      <data key="dLabelGeometry">
+        <point x="662.5499999999996" y="113.44999999999978"></point>
+      </data>
+    </edge>
+  </graph>
+</graphml>

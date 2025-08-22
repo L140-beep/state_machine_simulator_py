@@ -9,8 +9,29 @@ Combines all modules into a single file for easier distribution and use.
 
 """Utility functions for the simple parser."""
 
-from typing import List, TypeVar, Union
 
+import io
+import json
+import sys
+import os
+import re
+import time
+from abc import ABC
+from typing import Callable
+from functools import partial
+from dataclasses import dataclass
+from collections.abc import Iterable
+from collections import deque
+import random
+import abc
+from typing import Callable, Optional
+from collections import defaultdict
+from typing import List, Dict, Optional, Union, DefaultDict, Literal
+from dataclasses import dataclass, field
+from typing import Dict, Any
+import xml.etree.ElementTree as ET
+import ast
+from typing import List, TypeVar, Union
 ListType = TypeVar('ListType')
 
 
@@ -26,7 +47,8 @@ def to_list(nodes: Union[List[ListType], None, ListType]) -> List[ListType]:
 
 def is_vertex_type(value: str) -> bool:
     """Check if value is a valid vertex type."""
-    vertex_types = ['choice', 'initial', 'final', 'terminate', 'shallowHistory']
+    vertex_types = ['choice', 'initial',
+                    'final', 'terminate', 'shallowHistory']
     return value in vertex_types
 
 
@@ -44,17 +66,17 @@ def create_object_from_dict(cls, data_dict: dict):
     """
     if not isinstance(data_dict, dict):
         return data_dict
-    
+
     # Get the class annotations to understand expected types
     import inspect
     if hasattr(cls, '__annotations__'):
         annotations = cls.__annotations__
         kwargs = {}
-        
+
         for field_name, field_type in annotations.items():
             # Handle field aliasing (like pydantic's Field(alias=...))
             dict_key = field_name
-            
+
             # Handle special field name mappings
             if field_name == 'for_':
                 dict_key = '@for'
@@ -62,20 +84,20 @@ def create_object_from_dict(cls, data_dict: dict):
                 dict_key = f'@{field_name}'
             elif field_name == 'content':
                 dict_key = '#text'
-                
+
             if dict_key in data_dict:
                 value = data_dict[dict_key]
                 kwargs[field_name] = value
             elif field_name in data_dict:
                 kwargs[field_name] = data_dict[field_name]
-        
+
         # Handle remaining fields that might not be in annotations
         for key, value in data_dict.items():
             if key.startswith('@') and key[1:] in annotations:
                 kwargs[key[1:]] = value
             elif key == '#text' and 'content' in annotations:
                 kwargs['content'] = value
-        
+
         return cls(**kwargs)
     else:
         return cls(**data_dict) if data_dict else cls()
@@ -86,9 +108,6 @@ def create_object_from_dict(cls, data_dict: dict):
 # ============================================================================
 
 """Simple XML parser using only standard library."""
-
-import xml.etree.ElementTree as ET
-from typing import Dict, Any
 
 
 def parse_xml_to_dict(xml_string: str) -> Dict[str, Any]:
@@ -183,13 +202,10 @@ def parse(xml_string: str) -> Dict[str, Any]:
 
 """Module contains types for CyberiadaML scheme using standard library only."""
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Union, DefaultDict, Literal
-from collections import defaultdict
-
 
 # Type aliases
-CGMLVertexType = Literal['choice', 'initial', 'final', 'terminate', 'shallowHistory']
+CGMLVertexType = Literal['choice', 'initial',
+                         'final', 'terminate', 'shallowHistory']
 CGMLNoteType = Literal['formal', 'informal']
 AvailableKeys = DefaultDict[str, List['CGMLKeyNode']]
 
@@ -511,8 +527,8 @@ defaultSignals = ['unconditionalTransition', 'break']
 # ============================================================================
 
 class EventLoop:
-    events: list[str] = []
-    called_events: list[str] = []
+    events: list = []
+    called_events: list = []
     current_event_idx = 0
     insert_event_idx = 0
 
@@ -523,7 +539,7 @@ class EventLoop:
         EventLoop.events.insert(
             EventLoop.insert_event_idx,
             event
-            )
+        )
         if is_called:
             EventLoop.called_events.append(event)
 
@@ -548,7 +564,6 @@ class EventLoop:
 # QHSM.PY
 # ============================================================================
 
-from typing import Callable, Optional
 
 # qhsm.py
 
@@ -614,7 +629,7 @@ def do_transition(me: QHsm) -> None:
         me.target_ = None
         return
 
-    path: list[Optional[Callable[[QHsm, str], int]]] = [None] * Q_MAX_DEPTH
+    path: list = [None] * Q_MAX_DEPTH
     top = 0
     lca = -1
 
@@ -725,9 +740,6 @@ def PASS_EVENT_TO(obj: QHsm, e: str) -> None:
 # ============================================================================
 
 # Все классы компонентов кладутся сюда
-import abc
-import random
-from collections import deque
 
 # Компонент Считыватель:
 # Действие «Принять символ»
@@ -746,8 +758,6 @@ from collections import deque
 # Действие «Уменьшить»
 # Действие «Очистить»
 # Атрибут «Значение»
-
-
 
 
 class SchemeComponent(abc.ABC):
@@ -803,13 +813,13 @@ class Counter(SchemeComponent):
         self.value = 0
 
     def set(self, value: int):
-        self.value = value
+        self.value = int(value)
 
-    def add(self):
-        self.value += 1
+    def add(self, value: int):
+        self.value += int(value)
 
-    def sub(self):
-        self.value -= 1
+    def sub(self, value: int):
+        self.value -= int(value)
 
     def clear(self):
         self.value = 0
@@ -846,8 +856,10 @@ class Counter(SchemeComponent):
 # Атрибут Стена справа = 1/0
 # Атрибут Высаженные цветы = 0/1/2/3 (нет/роза/мята/василек)
 
+
 class GardenerCrashException(Exception):
     ...
+
 
 class Gardener:
 
@@ -884,8 +896,10 @@ class Gardener:
         attempts = 0
         walls_placed = 0
         # Список всех координат кроме стартовой (0,0)
-        coords = [(i, j) for i in range(M) for j in range(N) if not (i == 0 and j == 0)]
+        coords = [(i, j) for i in range(M)
+                  for j in range(N) if not (i == 0 and j == 0)]
         random.shuffle(coords)
+
         def is_connected(field):
             # BFS из (0,0), считаем количество достижимых клеток
             visited = [[False for _ in range(N)] for _ in range(M)]
@@ -902,7 +916,8 @@ class Gardener:
                         q.append((nx, ny))
                         reachable += 1
             # Количество пустых клеток
-            empty_cells = sum(field[i][j] != -1 for i in range(M) for j in range(N))
+            empty_cells = sum(field[i][j] != -1 for i in range(M)
+                              for j in range(N))
             return reachable == empty_cells
         for x, y in coords:
             if walls_placed >= num_walls or attempts >= max_attempts:
@@ -915,7 +930,6 @@ class Gardener:
                     self.field[y][x] = 0
             attempts += 1
         # print(f"Walls placed: {walls_placed}")
-
 
     def update_walls(self):
         # Обновляет значения wall_left_value, wall_right_value, wall_straight_value, wall_back_value
@@ -939,7 +953,8 @@ class Gardener:
         }[self.orientation]
         self.wall_left_value = 1 if self._wall_in_direction(dir_left) else 0
         self.wall_right_value = 1 if self._wall_in_direction(dir_right) else 0
-        self.wall_straight_value = 1 if self._wall_in_direction(self.orientation) else 0
+        self.wall_straight_value = 1 if self._wall_in_direction(
+            self.orientation) else 0
         self.wall_back_value = 1 if self._wall_in_direction(dir_back) else 0
 
     def wall_left(self):
@@ -977,7 +992,7 @@ class Gardener:
 class Sensor(SchemeComponent):
     def __init__(self, name: str):
         super().__init__(name)
-        self.gardener: Gardener | None = None
+        self.gardener = None
         self.flower = -1
         self.wall_right = -1
         self.wall_left = -1
@@ -1007,7 +1022,7 @@ class Sensor(SchemeComponent):
         if self.gardener is None:
             raise ValueError('Gardener is None!')
         return self.gardener.EMPTY
-    
+
     @property
     def wall_back(self):
         if self.gardener is None:
@@ -1032,7 +1047,6 @@ class Sensor(SchemeComponent):
             raise ValueError('Gardener is required for Compass work!')
         return self.gardener.NORTH
 
-    
     def get_sm_options(self, options: dict):
         gardener = options.get('gardener')
 
@@ -1041,7 +1055,7 @@ class Sensor(SchemeComponent):
 
         self.gardener = gardener
         self.flower = gardener.get_current_flower()
-    
+
     def search_walls(self):
         if self.gardener is None:
             raise ValueError('Gardener is None!')
@@ -1065,16 +1079,16 @@ class Sensor(SchemeComponent):
         self.flower = self.gardener.get_current_flower()
         EventLoop.add_event(f'{self.name}.isDataRecieved')
 
-    
 
 class UserSignal(SchemeComponent):
     def call(self):
         EventLoop.add_event(f'{self.name}.call', True)
 
+
 class Flower(SchemeComponent):
     def __init__(self, name: str):
         super().__init__(name)
-        self.gardener: Gardener | None = None
+        self.gardener = None
 
     def get_sm_options(self, options: dict):
         gardener = options.get('gardener')
@@ -1083,7 +1097,7 @@ class Flower(SchemeComponent):
             raise ValueError('Gardener is None!')
 
         self.gardener = gardener
-    
+
     def plant(self, flower: int):
         if self.gardener is None:
             raise ValueError('Gardener is None!')
@@ -1095,19 +1109,20 @@ class Flower(SchemeComponent):
 # Действие Повернуть влево
 # Действие Повернуть вправо
 
+
 class Mover(SchemeComponent):
     def __init__(self, name: str):
         super().__init__(name)
-        self.gardener: Gardener | None = None
-    
+        self.gardener = None
+
     def get_sm_options(self, options: dict):
-        gardener = options.get('gardener') 
+        gardener = options.get('gardener')
 
         if gardener is None:
             raise ValueError('Gardener is None!')
 
         self.gardener = gardener
-    
+
     def move_forward(self):
         if self.gardener is None:
             raise ValueError('Gardener is None!')
@@ -1129,6 +1144,7 @@ class Mover(SchemeComponent):
                 raise GardenerCrashException('Crash: hit a wall!')
         else:
             raise GardenerCrashException('Crash: out of bounds!')
+
     def move_backward(self):
         if self.gardener is None:
             raise ValueError('Gardener is None!')
@@ -1177,7 +1193,7 @@ class Mover(SchemeComponent):
 class Compass(SchemeComponent):
     def __init__(self, name: str):
         super().__init__(name)
-        self.gardener: Gardener | None = None
+        self.gardener = None
 
     def get_sm_options(self, options: dict):
         gardener = options.get('gardener')
@@ -1228,7 +1244,8 @@ class Compass(SchemeComponent):
         if self.gardener is None:
             raise ValueError('Gardener is required for Compass work!')
         return self.gardener.orientation
-    
+
+
 class LED:
     def on(self):
         print('on')
@@ -1238,6 +1255,7 @@ class LED:
 
     def get_sm_options(self, options: dict):
         ...
+
 
 class Timer:
     def start(self, time: int):
@@ -1249,9 +1267,6 @@ class Timer:
 # ============================================================================
 
 """Simple CyberiadaML parser using only standard libraries."""
-
-from collections import defaultdict
-from collections.abc import Iterable
 
 
 class CGMLParserException(Exception):
@@ -1774,7 +1789,7 @@ class CGMLParser:
                 for node in root.node:
                     cgml_states = {**cgml_states, **parse_node(node)}
             else:
-                cgml_states = { **cgml_states, **parse_node(root.node)}
+                cgml_states = {**cgml_states, **parse_node(root.node)}
         return cgml_states
 
     def _get_available_keys(self, cgml: CGML) -> AvailableKeys:
@@ -1808,13 +1823,6 @@ class CGMLParser:
 # CGML_SIGNAL.PY
 # ============================================================================
 
-from dataclasses import dataclass
-from functools import partial
-from typing import Callable
-from abc import ABC
-import time
-import re
-
 
 @dataclass
 class Component:
@@ -1827,7 +1835,8 @@ class Component:
 class Action:
     component: str
     action: str
-    args: list[str]
+    args: list
+
 
 @dataclass
 class Signal:
@@ -1837,11 +1846,14 @@ class Signal:
 
     def __str__(self):
         cond = f"[{self.condition}]" if self.condition else ""
-        return f"Signal{cond}/ {self.action}"  # статус не выводим, он всегда функция
+        # статус не выводим, он всегда функция
+        return f"Signal{cond}/ {self.action}"
+
 
 @dataclass
 class ChoiceSignal(Signal):
     target: str
+
 
 class StateMachine:
     def __init__(
@@ -1853,7 +1865,8 @@ class StateMachine:
         self.inital_states = init_initial_states(
             self, sm.initial_states, sm.transitions)
         self.final_states = init_final_states(self, sm.finals)
-        self.choice_states = init_choice_states(self, sm.choices, sm.transitions)
+        self.choice_states = init_choice_states(
+            self, sm.choices, sm.transitions)
         self.qhsm = QHsm()
         self.states = init_states(
             self.qhsm,
@@ -1864,7 +1877,8 @@ class StateMachine:
             sm.states,
             sm.transitions
         )
-        post_init_choice_states(self, self.choice_states, self.states, self.inital_states, self.final_states)
+        post_init_choice_states(
+            self, self.choice_states, self.states, self.inital_states, self.final_states)
         self.initial = find_highest_level_initial_state(self.inital_states)
         if self.initial is None:
             raise ValueError("No initial state found in the state machine.")
@@ -1916,7 +1930,7 @@ class StateMachine:
         # Если не найден оператор, просто сравниваем на True
         return bool(condition)
 
-    def __parse_action(self, actions: str) -> list[Action]:
+    def __parse_action(self, actions: str) -> list:
         """
         Парсит строку или строки вида
         'компонент.действие(арг1, ...)'\n'компонент2.действие2(...)'\n...
@@ -1942,15 +1956,30 @@ class StateMachine:
                 component=component, action=method, args=args))
         return result
 
+
     def intepreter_action(self, action: str):
+        def resolve(val):
+            try:
+                return float(val) if '.' in val else int(val)
+            except ValueError:
+                # Попытка получить значение из компонента
+                if '.' in val:
+                    comp_name, attr = val.split('.', 1)
+                    comp = self.components.get(comp_name)
+                    if comp and hasattr(comp.obj, attr):
+                        return getattr(comp.obj, attr)
+                return val
         # если не компонентная структура кода, то просто делаем eval здесь
         actions_obj = self.__parse_action(action)
         for action_obj in actions_obj:
             component = self.components.get(action_obj.component)
             if component:
                 method = getattr(component.obj, action_obj.action, None)
+                args = []
+                for arg in action_obj.args:
+                    args.append(resolve(arg))
                 if callable(method):
-                    method(*action_obj.args)
+                    method(*args)
                 else:
                     raise ValueError(
                         f"Action {action_obj.action} not \
@@ -1967,7 +1996,7 @@ class InitialState(Element):
         self,
         sm: StateMachine,
         target: str,
-        parent: str | None = None
+        parent=None
     ):
         self.sm = sm
         self.target = target
@@ -1979,8 +2008,9 @@ class InitialState(Element):
             return Q_HANDLED()
         return Q_TRAN(qhsm, self.sm.states[self.target].execute_signal)
 
+
 class ChoiceState(Element):
-    def __init__(self, sm: StateMachine, parent: str | None = None):
+    def __init__(self, sm: StateMachine, parent=None):
         self.sm = sm
         self.parent = parent
         self.conditions: list[ChoiceSignal] = []
@@ -1989,25 +2019,32 @@ class ChoiceState(Element):
         if signal_name == 'entry':
             EventLoop.add_event('noconditionTransition')
             return Q_HANDLED()
+            if self.parent:
+                return Q_SUPER(qhsm, self.sm.states[self.parent].execute_signal)
         else_signal = None
-        for signal in self.conditions:
-            signal_condition = signal.condition
-            signal_action = signal.action
-            if (signal_condition == "else"):
-                else_signal = signal
-                continue
-            if self.sm.intepreter_condition(signal_condition):
-                self.sm.intepreter_action(signal_action)
-                status = signal.status()
+        if signal_name == 'noconditionTransition':
+            for signal in self.conditions:
+                signal_condition = signal.condition
+                signal_action = signal.action
+                if (signal_condition == "else"):
+                    else_signal = signal
+                    continue
+                if self.sm.intepreter_condition(signal_condition):
+                    self.sm.intepreter_action(signal_action)
+                    status = signal.status()
+                    return status
+            if else_signal is not None:
+                self.sm.intepreter_action(else_signal.action)
+                status = else_signal.status()
                 return status
-        if else_signal is not None:
-            self.sm.intepreter_action(else_signal.action)
-            status = else_signal.status()
-            return status
+        else:
+            if self.parent:
+                return Q_SUPER(qhsm, self.sm.states[self.parent].execute_signal)
         return Q_UNHANDLED()
 
+
 class FinalState(Element):
-    def __init__(self, sm: StateMachine, parent: str | None = None):
+    def __init__(self, sm: StateMachine, parent=None):
         self.sm = sm
         self.parent = parent
 
@@ -2023,8 +2060,8 @@ class State(Element):
     def __init__(
         self,
         sm: StateMachine,
-        signals: dict[str, list[Signal]],
-        parent: str | None = None
+        signals: dict,
+        parent=None
     ):
         self.signals = signals
         self.parent = parent
@@ -2059,9 +2096,9 @@ class State(Element):
         return Q_UNHANDLED()
 
 
-def parse_actions_block(actions: str) -> dict[str, list[Signal]]:
+def parse_actions_block(actions: str) -> dict:
     """Парсит блок событий и действий из строки actions. Поддерживает несколько условий для одного события."""
-    signals: dict[str, list[Signal]] = {}
+    signals: dict = {}
     if not actions:
         return signals
     blocks = actions.strip().split('\n\n')
@@ -2091,16 +2128,17 @@ def parse_actions_block(actions: str) -> dict[str, list[Signal]]:
         signals[event_name].append(signal)
     return signals
 
+
 def init_choice_states(
     sm: StateMachine,
-    cgml_choice_states: dict[str, CGMLChoice],
-    cgml_transitions: dict[str, CGMLTransition]
-) -> dict[str, ChoiceState]:
+    cgml_choice_states: dict,
+    cgml_transitions: dict
+) -> dict:
     """Initialize choice states from CGMLChoice data. Для каждого состояния выбора ищет все исходящие переходы и парсит их в список Signal."""
-    initialized_states: dict[str, ChoiceState] = {}
+    initialized_states: dict = {}
     for state_id, cgml_choice in cgml_choice_states.items():
         choice_state = ChoiceState(sm, parent=cgml_choice.parent)
-        conditions: list[ChoiceSignal] = []
+        conditions: list = []
         for trans in cgml_transitions.values():
             if trans.source != state_id:
                 continue
@@ -2128,12 +2166,13 @@ def init_choice_states(
         initialized_states[state_id] = choice_state
     return initialized_states
 
+
 def post_init_choice_states(
     sm: StateMachine,
-    choice_states: dict[str, ChoiceState],
-    states: dict[str, State],
-    initials: dict[str, 'InitialState'],
-    finals: dict[str, FinalState]
+    choice_states: dict,
+    states: dict,
+    initials: dict,
+    finals: dict
 ):
     """
     Для каждого ChoiceState обновляет status у Signal в conditions на partial(Q_TRAN, qhsm, target_func),
@@ -2153,20 +2192,22 @@ def post_init_choice_states(
             elif signal.target in choice_states:
                 target_func = choice_states[signal.target].execute_signal
             else:
-                raise ValueError(f"Target state '{signal.target}' not found for choice transition.")
+                raise ValueError(
+                    f"Target state '{signal.target}' not found for choice transition.")
             signal.status = partial(Q_TRAN, qhsm, target_func)
+
 
 def init_states(
         qhsm: QHsm,
         sm: 'StateMachine',
-        initials: dict[str, 'InitialState'],
-        finals: dict[str, FinalState],
-        choices: dict[str, ChoiceState],
-        cgml_states: dict[str, CGMLState],
-        cgml_transition: dict[str, CGMLTransition],
-) -> dict[str, 'State']:
+        initials: dict,
+        finals: dict,
+        choices: dict,
+        cgml_states: dict,
+        cgml_transition: dict,
+) -> dict:
     """Initialize states from CGMLState data."""
-    initialized_states: dict[str, 'State'] = {}
+    initialized_states: dict = {}
     for state_id, cgml_state in cgml_states.items():
         signals = parse_actions_block(cgml_state.actions)
         initialized_states[state_id] = State(sm, signals, cgml_state.parent)
@@ -2205,9 +2246,10 @@ def init_states(
             initialized_states[trans.source].signals[event_name].append(signal)
     return initialized_states
 
-def init_final_states(sm: StateMachine, cgml_final_states: dict[str, CGMLFinal]):
+
+def init_final_states(sm: StateMachine, cgml_final_states: dict):
     """Initialize final states from CGMLFinalState data."""
-    initialized_states: dict[str, FinalState] = {}
+    initialized_states: dict = {}
     for state_id, cgml_final in cgml_final_states.items():
         initialized_states[state_id] = FinalState(
             sm,  # StateMachine not needed here, but can be set later
@@ -2215,10 +2257,11 @@ def init_final_states(sm: StateMachine, cgml_final_states: dict[str, CGMLFinal])
         )
     return initialized_states
 
+
 def init_components(
-    cgml_components: dict[str, CGMLComponent],
+    cgml_components: dict,
     sm_parameters: dict
-) -> dict[str, Component]:
+) -> dict:
     """Initialize components from CGMLComponent data."""
     initialized_components = {}
     for cgml_comp in cgml_components.values():
@@ -2239,9 +2282,9 @@ def init_components(
 
 def init_initial_states(
     sm: 'StateMachine',
-    cgml_initial_states: dict[str, CGMLInitialState],
-    cgml_transitions: dict[str, CGMLTransition]
-) -> dict[str, 'InitialState']:
+    cgml_initial_states: dict,
+    cgml_transitions: dict
+) -> dict:
     """Initialize initial states from CGMLInitialState data."""
     initial_states = {}
     for state_id, initial_state in cgml_initial_states.items():
@@ -2258,17 +2301,18 @@ def init_initial_states(
 
 def find_transitions_for_state(
     state_id: str,
-    cgml_transitions: dict[str, CGMLTransition]
-) -> list[CGMLTransition]:
+    cgml_transitions: dict
+) -> list:
     """Возвращает список переходов, у которых source == state_id."""
     return [
         trans for trans in cgml_transitions.values()
         if trans.source == state_id
     ]
 
+
 def find_highest_level_initial_state(
-    initial_states: dict[str, 'InitialState']
-) -> 'InitialState | None':
+    initial_states: dict
+):
     """Находит начальное состояние с самым высоким уровнем."""
     for initial_state in initial_states.values():
         if initial_state.parent is None:
@@ -2278,14 +2322,16 @@ def find_highest_level_initial_state(
 
 
 class StateMachineResult:
-    def __init__(self, timeout: bool, signals: list[str], called_signals: list[str], components: dict[str, Component]):
+    def __init__(self, timeout: bool, signals: list, called_signals: list, components: dict):
         self.timeout = timeout  # Закончилась ли МС по таймауту
-        self.signals = signals  # Сигналы, которые были вызваны (с учетом сигналов по умолчанию)
+        # Сигналы, которые были вызваны (с учетом сигналов по умолчанию)
+        self.signals = signals
         self.called_signals = called_signals  # Все, что вызвано пользователем вручную
         self.components = components  # компоненты и их состояния
 
+
 def run_state_machine(sm: StateMachine,
-                      signals: list[str], timeout_sec: float = 10.0) -> StateMachineResult:
+                      signals: list, timeout_sec: float = 10.0) -> StateMachineResult:
     """
     Запускает машину состояний на основе CGML XML и списка сигналов.
     Возвращает StateMachineResult: был ли выход по таймауту, список сигналов, компоненты.
@@ -2316,15 +2362,13 @@ def run_state_machine(sm: StateMachine,
 
 # Подключение библиотек
 # В данном случае мы работаем со стандартным вводом и выводом, а тестовые данные у нас в формате JSON
-import os
-import sys
-import io
-import json
+
 
 def get_log(user_exception_str=None):
     return '\n'.join([s for s in [sys.stdout.getvalue(), user_exception_str] if s])
 
 # Функция, формирующая в случае ошибки результат с начислением 0 баллов и соответствующим "достижением"
+
 
 def return_user_error(user_error, user_exception_str=None):
     return {'score': 0, 'message': user_error, 'log': get_log(user_exception_str)}
@@ -2334,7 +2378,7 @@ def return_user_error(user_error, user_exception_str=None):
 # ============================================================================
 
 
-def check_reader(result: StateMachineResult, answer_signals: list[str]) -> tuple[str, bool]:
+def check_reader(result: StateMachineResult, answer_signals: list) -> tuple:
     if result.timeout:
         return ('Машина состояний работает слишком долго!', False)
 
@@ -2346,13 +2390,14 @@ def check_reader(result: StateMachineResult, answer_signals: list[str]) -> tuple
             return (f'Неверное событие {result.called_signals[i]}', False)
     return ('', True)
 
+
 def auto_test_reader(
     cgml_sm: CGMLStateMachine,
     sm_parameters: dict,
-    entry_signals: list[str],
-    answer_signals: list[str],
-    ignored_signals: list[str],
-    timeout: int = 10000
+    entry_signals: list,
+    answer_signals: list,
+    ignored_signals: list,
+    timeout: int = 5
 ):
     sm = StateMachine(
         cgml_sm,
@@ -2362,7 +2407,6 @@ def auto_test_reader(
     check_result = check_reader(result, answer_signals)
     return check_result, result
 
-import ast
 
 def extract_state_machine(code: str):
     tree = ast.parse(code)
@@ -2377,33 +2421,48 @@ def extract_state_machine(code: str):
 
     return None
 
+
 # Основная функция запуска пользовательских программ, проверки и начисления очков, вызываемая для каждого теста
 # Ключевые параметры
 # input - данные для проверки решений (входящие)
 # output - данные для проверки решений (исходящие)
 # user_programs - массив программ участника в составе решения
 def run(run_index, iteration_index, input, output, user_programs):
-    SCORE = 10
+    SCORE = 5
     current_score = 0
     xml = extract_state_machine(user_programs[0])
     if xml is None:
-        return { 'score': current_score, 'message': "Отсутствует переменная state_machine с CGML!", 'log': f'{user_programs}' } 
+        return {'score': current_score, 'message': "Отсутствует переменная state_machine с CGML!", 'log': f'{user_programs}'}
     parser = CGMLParser()
     cgml_state_machines = parser.parse_cgml(xml)
     assert cgml_state_machines.state_machines, "Отсутствуют машины состояний!"
     cgml_sm = list(cgml_state_machines.state_machines.values())[0]
-    test = ('АААБББАВС', ['impulseA', 'impulseA',
-            'impulseA', 'impulseA'])
-    check_result, run_result = auto_test_reader(
-        cgml_sm,
-        {'message': test[0]},
-        [], test[1], ['char_accepted', 'line_finished']
-    )
-    error, status = check_result
-    if status is True:
-        current_score = SCORE
-        error = 'Success!'
-    return { 'score': current_score, 'log': f'Signals: {", ".join(run_result.called_signals)}, Score: {current_score}'}
+    error = 'Машина состояний выполнилась успешно!'
+    tests = [('АААГБББАВС', ['impulseA', 'impulseA',
+                             'impulseA', 'impulseB', 'impulseB', 'impulseB', 'impulseA', 'impulseC']),
+             ('ОМСМЯЧСФЫ', []), ('АБВ', ['impulseA', 'impulseB', 'impulseC'])]
+    log = ''
+    for i, test in enumerate(tests):
+        log += f'Test {i}: '
+        check_result, run_result = auto_test_reader(
+            cgml_sm,
+            {'message': test[0]},
+            [], test[1], ['char_accepted', 'line_finished']
+        )
+        check_error, status = check_result
+        if status is True:
+            current_score = SCORE
+            error = 'Машина состояний выполнилась успешно!'
+        else:
+            current_score = 0
+            error = check_error
+            log += check_error + '\n'
+            log += 'Signals: ' + ', '.join(run_result.called_signals)
+            break
+        log += error + '\n'
+        log += 'Signals: ' + ', '.join(run_result.called_signals) + '\n'
+
+    return {'score': current_score, 'message': error, 'log': log}
 
 
 # Example usage:
@@ -2438,39 +2497,35 @@ lapkiVisual/ true
 
 </data>
     </node>
-    <node id="qexnakiflyoqhislvpzg">
-      <data key="dName">Состояние</data>
+    <node id="obietjiuypodkkkdslbq">
+      <data key="dName">Анализ</data>
       <data key="dData">entry/
 Reader1.read()
 
 Reader1.char_accepted[Reader1.current_char == А]/
-Reader1.read()
 Impulse1.impulseA()
+Reader1.read()
+
+Reader1.char_accepted[Reader1.current_char == Б]/
+Impulse1.impulseB()
+Reader1.read()
+
+Reader1.char_accepted[Reader1.current_char == В]/
+Impulse1.impulseC()
+Reader1.read()
 
 Reader1.char_accepted[else]/
 Reader1.read()
 
 </data>
       <data key="dGeometry">
-        <rect x="-20" y="259" width="450" height="100"></rect>
+        <rect x="360.20000000000005" y="343.1000000000002" width="450" height="100"></rect>
       </data>
     </node>
-    <node id="ioajuzglugwuemqzapxl">
+    <node id="kejfnzlbanwfyjuigoai">
       <data key="dVertex">initial</data>
       <data key="dGeometry">
-        <point x="-120" y="239"></point>
-      </data>
-    </node>
-    <node id="cImpulse1">
-      <data key="dNote">formal</data>
-      <data key="dName">CGML_COMPONENT</data>
-      <data key="dData">id/ Impulse1
-
-type/ Impulse
-
-</data>
-      <data key="dLapkiSchemePosition">
-        <point x="30" y="30"></point>
+        <point x="297" y="283"></point>
       </data>
     </node>
     <node id="cReader1">
@@ -2480,16 +2535,29 @@ type/ Impulse
 
 type/ Reader
 
+name/ Считыватель
+
 </data>
       <data key="dLapkiSchemePosition">
         <point x="30" y="30"></point>
       </data>
     </node>
-    <edge id="xxvsgpimcuxvluijysem" source="ioajuzglugwuemqzapxl" target="qexnakiflyoqhislvpzg"></edge>
+    <node id="cImpulse1">
+      <data key="dNote">formal</data>
+      <data key="dName">CGML_COMPONENT</data>
+      <data key="dData">id/ Impulse1
+
+type/ Impulse
+
+name/ Импульс
+
+</data>
+      <data key="dLapkiSchemePosition">
+        <point x="30" y="30"></point>
+      </data>
+    </node>
+    <edge id="jsebtcnbbkkumjuwdzkb" source="kejfnzlbanwfyjuigoai" target="obietjiuypodkkkdslbq"></edge>
   </graph>
-</graphml>\'\'\'
+</graphml>
+\'\'\'
 ''']))
-    # Example of how to use the bundle
-    # print("State Machine Simulator Bundle loaded successfully!")
-    # print("Available components:", [name for name in globals() if name in ['Reader', 'Impulse', 'Counter', 'Sensor', 'UserSignal', 'Flower', 'Mover', 'Compass', 'LED', 'Timer']])
-    # print("Main classes:", [name for name in globals() if name in ['StateMachine', 'CGMLParser', 'EventLoop', 'QHsm']])
