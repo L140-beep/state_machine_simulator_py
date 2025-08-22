@@ -59,15 +59,15 @@ class Reader(Component):
 class Impulse(Component):
     def impulseA(self):
         print('impulseA')
-        EventLoop.add_event('impulseA')
+        EventLoop.add_event('impulseA', True)
 
     def impulseB(self):
         print('impulseB')
-        EventLoop.add_event('impulseB')
+        EventLoop.add_event('impulseB', True)
 
     def impulseC(self):
         print('impulseC')
-        EventLoop.add_event('impulseC')
+        EventLoop.add_event('impulseC', True)
 
 class Counter(Component):
     def __init__(self, name: str):
@@ -340,7 +340,7 @@ class Sensor(Component):
 
 class UserSignal(Component):
     def call(self):
-        EventLoop.add_event(f'{self.name}.call')
+        EventLoop.add_event(f'{self.name}.call', True)
 
 class Flower(Component):
     def __init__(self, name: str):

@@ -480,9 +480,10 @@ def find_highest_level_initial_state(
 
 
 class StateMachineResult:
-    def __init__(self, timeout: bool, signals: list[str], components: dict[str, Component]):
+    def __init__(self, timeout: bool, signals: list[str], called_signals: list[str], components: dict[str, Component]):
         self.timeout = timeout  # Закончилась ли МС по таймауту
         self.signals = signals  # Сигналы, которые были вызваны (с учетом сигналов по умолчанию)
+        self.called_signals = called_signals  # Все, что вызвано пользователем вручную
         self.components = components  # компоненты и их состояния
 
 def run_state_machine(sm: StateMachine,
@@ -508,4 +509,4 @@ def run_state_machine(sm: StateMachine,
         if event is None or event == 'break':
             break
         SIMPLE_DISPATCH(qhsm, event)
-    return StateMachineResult(timeout, EventLoop.events, sm.components)
+    return StateMachineResult(timeout, EventLoop.events, EventLoop.called_events, sm.components)

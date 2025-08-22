@@ -13,32 +13,16 @@ from state_machine_sim.cgml_types import (
 TEST_GRAPHML_PATH = os.path.join(os.path.dirname(__file__), "from_ide.graphml")
 
 
-def check_reader(result: StateMachineResult, entry_signals: list[str], answer_signals: list[str], ignored_signals: list[str]) -> tuple[str, bool]:
+def check_reader(result: StateMachineResult, answer_signals: list[str]) -> tuple[str, bool]:
     if result.timeout:
         return ('Машина состояний работает слишком долго!', False)
 
-    answer_i = 0
-    entry_i = 0
-    # breakpoint()
-    for signal in result.signals:
-        if signal == 'noconditionTransition':
-            continue
-        is_ignored = False
-        for ignored in ignored_signals:
-            if signal.find(ignored) != -1:
-                is_ignored = True
-                break
-        if is_ignored:
-            continue
-        if entry_i in range(len(entry_signals)) and signal == entry_signals[entry_i]:
-            entry_i += 1
-            continue
-        if answer_i in range(len(answer_signals)) and signal == answer_signals[answer_i]:
-            answer_i += 1
-            continue
-        return (f'Неправильное событие {signal}', False)
-    if (answer_i != len(answer_signals)):
-        return ('Неверное количество событий!', False)
+    if len(answer_signals) != len(result.called_signals):
+        return ('Вызвано неверное количество событий!', False)
+
+    for i in range(len(answer_signals)):
+        if answer_signals[i] != result.called_signals[i]:
+            return (f'Неверное событие {result.called_signals[i]}', False)
     return ('', True)
 
 
@@ -55,7 +39,7 @@ def auto_test_reader(
         sm_parameters=sm_parameters,
     )
     result = run_state_machine(sm, entry_signals, timeout)
-    check_result = check_reader(result, [], answer_signals, ignored_signals)
+    check_result = check_reader(result, answer_signals)
     if check_result[1] is False:
         print(check_result[0])
         return False
@@ -75,7 +59,8 @@ def test_reader():
 
     for test in tests:
         auto_test_reader(
-            list(cgml_state_machines.state_machines.values())[0], 
+            list(
+                cgml_state_machines.state_machines.values())[0], 
                         {'message': test[0]},
                         [], test[1], ['char_accepted', 'line_finished']
                         )
